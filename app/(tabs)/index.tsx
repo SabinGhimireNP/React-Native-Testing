@@ -21,7 +21,7 @@ export default function Index() {
     }
    setText("");
     Alert.alert("Todo Added", `You added: ${data}`);
-    router.push("/testing");
+    router.push("/BackingTest");
 
   }
 
