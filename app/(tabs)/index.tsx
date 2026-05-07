@@ -1,98 +1,94 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import React from "react";
+import { Alert, FlatList, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {Trash} from "lucide-react-native";
+import { useRouter } from "expo-router";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
+
+export default function Index() {
+  const [todos, setTodos] = React.useState<string[]>([
+    "Buy groceries",
+    "Walk the dog",
+    "Finish React Native project",
+  ]);
+  const [text, setText] = React.useState("");
+  const router = useRouter();
+
+  function handlePress(index: any) {
+   const data= text.trim();
+    if(data){
+      setTodos([...todos, data]);
+    }
+   setText("");
+    Alert.alert("Todo Added", `You added: ${data}`);
+    router.push("/testing");
+
+  }
+
+  function handleDelete(index: number) {
+    Alert.alert("Delete Todo", "Are you sure you want to delete this todo?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: () => {
+          const newTodos = [...todos];
+          newTodos.splice(index, 1);
+          setTodos(newTodos);
+        },
+      },
+    ]);
+  }
+
+  return <ScrollView contentContainerClassName="flex items-center justify-center text-3xl min-h-screen py-4 bg-gray-200">
+    <View className="bg-white p-4 rounded-lg ">
+      <View className="flex items-center justify-center">
+        <Text className="text-2xl font-bold">My Todo App</Text>
+      </View>
+      <View className="flex items-start justify-center border p-5  rounded-lg border-gray-300">
+        <View className="flex flex-row items-center justify-center ">
+            <TextInput
+            className=" border rounded-full px-4 py-2 mt-4 w-64 mx-2"
+            placeholder="Enter a new todo"
+            onSubmitEditing={handlePress}
+            id="TextInput"
+            value={text}
+            onChangeText={setText}
             />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+            <TouchableOpacity className="bg-blue-500 rounded-full px-5 py-2 mt-4 flex items-center justify-center" onPress={handlePress}><Text className="text-white">Add Todo</Text></TouchableOpacity>
+        </View>
+        <View className="mt-4 border-t pt-4 w-full">
+          <View>
+          <FlatList
+          scrollEnabled={false}
+          data={todos}  renderItem={({ item, index }) => (
+   <View key={index} className="flex-row items-center justify-between mb-4 border-b border-gray-300 p-2 rounded-xl shadow-sm">
+  
+  <View className="flex-1 border- py-2 mr-4">
+    <Text className="text-lg text-slate-800 flex-wrap">
+      {item}
+    </Text>
+  </View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+  <TouchableOpacity 
+    className="active:scale-90 transition-transform"
+    onPress={() => handleDelete(index)}
+  >
+    <View className="bg-red-500 p-3 rounded-full shadow-md">
+      <Trash size={20} color="white" />
+    </View>
+  </TouchableOpacity>
+
+</View>
+          )}>
+
+          </FlatList>
+          </View>
+        </View>
+      </View>
+    </View>
+  </ScrollView>;
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
