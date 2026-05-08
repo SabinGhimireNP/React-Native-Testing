@@ -32,7 +32,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="testing"
+        name="Products"
         options={{
           title: "Products",
           headerShown: true, // Hide the header for the Home screen

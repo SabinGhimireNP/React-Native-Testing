@@ -1,6 +1,6 @@
 import { View, Text, FlatList, Image, SafeAreaView, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import useDataStore from '../../lib/store/data'
+import useDataStore from '../../../lib/store/data'
 
 const Testing = () => {
   const [data, setData] = useState<any[]>([])
@@ -33,7 +33,7 @@ const fetchData = useDataStore((state) => state.fetchData);
 
   return (
     // SafeAreaView prevents content from hiding under the iPhone notch
-    <SafeAreaView className="flex-1 bg-gray-200 px-4">
+    <SafeAreaView className="flex-1 bg-gray-200 px-">
       <FlatList 
         data={todos} 
         keyExtractor={(item) => item.id.toString()}
