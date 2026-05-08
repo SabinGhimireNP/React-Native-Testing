@@ -15,12 +15,6 @@ export default function TabLayout() {
         headerShown: false, // Applies to all screens automatically
         tabBarActiveTintColor: "#2563eb", // A nice blue for the active tab
         tabBarInactiveTintColor: "#64748b", // Slate gray for inactive tabs
-        tabBarStyle: {
-          borderTopWidth: 1,
-          borderTopColor: "#e2e8f0",
-          height: 60,
-          paddingBottom: 8,
-        },
       }}
     >
       <Tabs.Screen
@@ -35,7 +29,7 @@ export default function TabLayout() {
         name="Products"
         options={{
           title: "Products",
-          headerShown: true, // Hide the header for the Home screen
+          headerShown: false, // Hide the header for the Home screen
           // Swapped TestTube for PackageSearch since it's a product list!
           tabBarIcon: ({ color, size }) => (
             <PackageSearch color={color} size={size} />

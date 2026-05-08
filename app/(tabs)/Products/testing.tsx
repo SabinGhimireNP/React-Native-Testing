@@ -1,6 +1,8 @@
-import { View, Text, FlatList, Image, SafeAreaView, TouchableOpacity } from 'react-native'
+import { View, Text, FlatList, Image, SafeAreaView, TouchableOpacity, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import useDataStore from '../../../lib/store/data'
+import { useRouter } from 'expo-router'
+
 
 const Testing = () => {
   const [data, setData] = useState<any[]>([])
@@ -14,6 +16,8 @@ const loading = useDataStore((state) => state.loading);
 // Functions/Actions don't change, so this never causes a re-render
 const fetchData = useDataStore((state) => state.fetchData);
 
+const router = useRouter();
+
   // const fetchData = async () => {
   //   try {
   //     const result = await fetch('https://dummyjson.com/products').then(res => res.json())
@@ -25,6 +29,13 @@ const fetchData = useDataStore((state) => state.fetchData);
 
   function handelBuy(){
     alert("Product added to cart")
+  }
+  
+  function handelPress(item: any) {
+   router.push({
+  pathname: "/Products/[id]", // This matches the actual filename
+  params: { id: item.id }      // This fills the [id] variable
+});
   }
 
   useEffect(() => {
@@ -40,6 +51,7 @@ const fetchData = useDataStore((state) => state.fetchData);
         contentContainerStyle={{ paddingBottom: 20 }} // Space at the very bottom
         renderItem={({ item }) => (
           // Removed min-h-screen, added my-2 for spacing between cards
+         < Pressable onPress={() => handelPress(item)} className="px-4 my-2">
           <View className="px-4 my-2">
             <View className="bg-white p-4 rounded-xl shadow-sm">
               
@@ -80,6 +92,7 @@ const fetchData = useDataStore((state) => state.fetchData);
 
             </View>
           </View>
+          </Pressable>
         )}
       />
     </SafeAreaView>
